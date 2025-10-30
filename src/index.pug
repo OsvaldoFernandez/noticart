@@ -1,0 +1,63 @@
+
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Noticart
+
+body
+  #wrapper
+    #content-wrapper
+      div(x-data='')
+        .content
+          .container-fluid
+            .d-sm-flex.align-items-center.justify-content-between.mb-4
+              h3.mb-0.text-gray-800.mt-4 Noticart
+            
+            .col-md-12.col-sm-12
+              .card.border-left-primary.shadow.mb-4
+                .card-header.py-3
+                  .d-sm-flex.align-items-center.justify-content-between
+                    h6.m-0.font-weight-bold.text-primary Productos
+                    a.d-none.d-sm-inline-block.btn.btn-sm.btn-primary.shadow-sm(@click='fetchPromos()') Buscar el mejor precio!
+                .card-body
+                  table.table.table-bordered
+                    thead
+                      tr
+                        th ID
+                        th Nombre
+                        th Precio Mínimo
+                        th -
+                    tbody
+                      template(x-for='product in $store.controller.products')
+                        tr
+                          td
+                            div(x-text='product.id')
+                          td
+                            div(x-text='product.name')
+                          td
+                            div(x-text='product.precioMin')
+                          td
+                            template(x-if='product.precioIn')
+                              button.btn.btn-secondary(type='button' data-container='body' data-toggle='popover' data-placement='bottom' data-content='product.precioIn')
+                                i.bi.bi-pin-map-fill
+
+                            template(x-if='product.precioMin < 3000')
+                              i.bi.bi-percent(role='button')
+
+            //- table.table
+            //-   thead
+            //-     tr
+            //-       th(scope='col') #
+            //-       th(scope='col') Nombre
+            //-       th(scope='col') Precio
+            //-       th(scope='col') Disponible en
+            //-       th(scope='col') Promos
+            //-   tbody
+            //-     template(x-for='product in $store.controller.products')
+            //-       tr
+            //-         th(scope='row' x-text='product.id')
+            //-         td(x-text='product.name')
+            //-         td(x-text='product.precioMin')
+            //-         td(x-text='product.precioIn')
+            //-         td(x-text='product.promos')
