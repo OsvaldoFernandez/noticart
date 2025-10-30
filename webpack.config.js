@@ -27,13 +27,39 @@ export default {
       {
         test: /\.tsx?$/, // Apply ts-loader to .ts and .tsx files
         use: 'ts-loader'
+      },{
+        test: /\.pug$/,
+        loader: 'pug-loader',
+        options: {
+          pretty: true, // makes HTML readable
+        }
+      }, {
+        test: /\.(css|scss)$/,
+        use: [
+          'style-loader',  // 3️⃣ Injects styles into DOM
+          'css-loader',    // 2️⃣ Translates CSS into JS modules
+          {
+            loader: 'sass-loader',   // 1️⃣ Compiles SCSS to CSS
+            options: {
+              sourceMap: true,
+              sassOptions: {
+                quietDeps: true, // Silence deprecation warnings from dependencies
+                logger: {
+                  warn: (message, options) => {
+                    if (options?.span?.url?.pathname?.includes('bootstrap')) return;
+                    console.warn(message);
+                  },
+                }
+              },
+            }
+          }
+        ],
       }
-
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/index.html",
+      template: "./src/index.pug",
       inject: "body",
     }),
   ],
