@@ -4,6 +4,7 @@ head
   meta(charset='UTF-8')
   meta(name='viewport' content='width=device-width, initial-scale=1.0')
   title Noticart
+  script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js')
 
 body
   #wrapper
@@ -37,27 +38,13 @@ body
                             div(x-text='product.name')
                           td
                             div(x-text='product.precioMin')
+  
                           td
                             template(x-if='product.precioIn')
-                              button.btn.btn-secondary(type='button' data-container='body' data-toggle='popover' data-placement='bottom' data-content='product.precioIn')
+                              button.btn.btn-primary(type='button' data-toggle='popover' title='Disponible en:' :id="`locationPopover-${product.id}`")
                                 i.bi.bi-pin-map-fill
 
-                            template(x-if='product.precioMin < 3000')
-                              i.bi.bi-percent(role='button')
-
-            //- table.table
-            //-   thead
-            //-     tr
-            //-       th(scope='col') #
-            //-       th(scope='col') Nombre
-            //-       th(scope='col') Precio
-            //-       th(scope='col') Disponible en
-            //-       th(scope='col') Promos
-            //-   tbody
-            //-     template(x-for='product in $store.controller.products')
-            //-       tr
-            //-         th(scope='row' x-text='product.id')
-            //-         td(x-text='product.name')
-            //-         td(x-text='product.precioMin')
-            //-         td(x-text='product.precioIn')
-            //-         td(x-text='product.promos')
+                            template(x-if='product.promos')
+                              button.btn.btn-success(type='button' data-toggle='popover' title='Promos:' :id="`promoPopover-${product.id}`" data-bs-html='true')
+                                b
+                                  i.bi.bi-percent

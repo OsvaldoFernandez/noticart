@@ -47,15 +47,25 @@ const updateTable = (id, attr, value) => {
 const prodSuccess = (resp, remainingProds) => {
   updateTable(remainingProds[0].id, 'precioMin', resp.data.producto.precioMin);
   const minSucursal = resp.data.sucursales.filter((sucursal) => sucursal.preciosProducto && sucursal.preciosProducto.precioLista == resp.data.producto.precioMin)[0];
-  updateTable(remainingProds[0].id, 'precioIn', minSucursal ? minSucursal.banderaDescripcion + ' - ' + minSucursal.direccion : 'N/A');
+  const precioIn = minSucursal ? minSucursal.banderaDescripcion + ' - ' + minSucursal.direccion : 'N/A';
+  updateTable(remainingProds[0].id, 'precioIn', precioIn);
   let promos = "";
   resp.data.sucursales.forEach((sucursal) => {
   	if (sucursal.preciosProducto && sucursal.preciosProducto.promo2.descripcion) {
       promos += sucursal.banderaDescripcion + ' - ' + sucursal.direccion+"\n"+sucursal.preciosProducto.promo2.descripcion;
-      promos += "\n";
+      promos += "<br><br>";
   	}
   })
   updateTable(remainingProds[0].id, 'promos', promos);
+  Alpine.nextTick(() => {
+    $(function () {
+      $(`#locationPopover-${remainingProds[0].id}`).attr('data-bs-content', precioIn);
+      $(`#locationPopover-${remainingProds[0].id}`).popover('dispose').popover();
+      $(`#promoPopover-${remainingProds[0].id}`).attr('data-bs-content', promos);
+      $(`#promoPopover-${remainingProds[0].id}`).popover('dispose').popover();
+    });
+  });
+
   getProds(remainingProds.slice(1));
 };
 
